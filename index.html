@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Pokédex</h1>
+    <button id="allPokemonBtn">All Pokemons</button> <br>
+    <div id="container">
+        <a class="card" href="./pokemon.html">
+            <div class="pokemonId">#1</div>
+            <img class="pokemonImg" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png" alt="">
+            <div class="pokemonName">bulbasaur</div>
+            <div class="pokemonType">grass</div>
+        </a>
+    </div>
+    <div id="pokemonSingle">
+        <img src="" alt="">
+        <div id="pokeSingleId"></div>
+        <img id="pokeSingleImg" src="">
+        <div id="pokeSingleName"></div>
+        <div id="pokeSingleType"></div>
+    </div>
+
+
+    <script src="./pokemons.js"></script>
+    <script src="./pokemonager.js"></script>
+</body>
+</html>
