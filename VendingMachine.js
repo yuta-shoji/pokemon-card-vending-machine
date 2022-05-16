@@ -1,7 +1,8 @@
 // your class here
-const Pokemonager = require('./pokemonager');
-const axios = require('axios').default;
-let pokemonager = new Pokemonager()
+// const Pokemonager = require("./pokemonager");
+// const axios = require("axios").default;
+let pokemonager = new Pokemonager();
+
 class VendingMachine {
   constructor() {
     this.balance = 0;
@@ -11,9 +12,9 @@ class VendingMachine {
       c: [401, 600],
       d: [601, 800],
       e: [801, 1000],
-      f: [1001, 1126]
-    }
-    this.selectStatus = ""
+      f: [1001, 1126],
+    };
+    this.selectStatus = "";
 
     this.inventory = {
       a: [],
@@ -21,37 +22,41 @@ class VendingMachine {
       c: [],
       d: [],
       e: [],
-      f: []
+      f: [],
     };
-    this.allPokemon();
 
-  };
+    this.pokedex = {};
+    // this.allPokemon();
+  }
+
   async allPokemon() {
-    console.log('allPokemon!!!!!!!');
-    let all = await pokemonager.getPokemons(1)
+    console.log("allPokemon!!!!!!!");
+    let all = await pokemonager.getPokemons(1126);
     let jsonData = [];
     let x;
     for (const data of all.data.results) {
-      console.log('data: ', data);
-      x = await axios.get(data.url)
-      jsonData.push(x)
+      // console.log("data: ", data);
+      x = await axios.get(data.url);
+      jsonData.push(x);
     }
-    console.log('jsonData: ', jsonData);
+    // console.log("jsonData: ", jsonData);
     for (const pokemon of jsonData) {
-      if (pokemon.id <= 200) {
+      if (pokemon.data.id <= 200) {
         this.inventory.a.push(pokemon);
-      } else if (pokemon.id <= 400) {
+      } else if (pokemon.data.id <= 400) {
         this.inventory.b.push(pokemon);
-      } else if (pokemon.id <= 600) {
+      } else if (pokemon.data.id <= 600) {
         this.inventory.c.push(pokemon);
-      } else if (pokemon.id <= 800) {
+      } else if (pokemon.data.id <= 800) {
         this.inventory.d.push(pokemon);
-      } else if (pokemon.id <= 1000) {
+      } else if (pokemon.data.id <= 1000) {
         this.inventory.e.push(pokemon);
       } else {
         this.inventory.f.push(pokemon);
       }
-    };
+      this.pokedex[pokemon.data.id] = "";
+    }
+    console.log("inventory", this.inventory);
   }
 
   // pokemonager.getAllPokemon().then((res) => {
@@ -65,9 +70,6 @@ class VendingMachine {
   //   };
   //   return this.inventory
   // });
-
-
-
 
   throwError(flag) {
     if (!flag) {
@@ -95,9 +97,35 @@ class VendingMachine {
   // }
 
   async selectPack(pack) {
+    console.log("pack: ", this.inventory[pack]);
+    await vendingMachine.allPokemon();
     this.selectStatus = pack;
     // const packs = await this.generateInventory();
     return this.inventory[pack];
+  }
+
+  async getFivePack(pack) {
+    deleteElem();
+    const packs = await this.selectPack(pack);
+    console.log("packs: ", packs);
+    const packResult = [];
+    for (let i = 0; i < 5; i++) {
+      let num = this.random(packs.length);
+      packResult.push(packs[num]);
+    }
+    this.addPokedex(packResult);
+    createCardElem(packResult);
+    return packResult;
+  }
+
+  random(upper) {
+    return Math.floor(Math.random() * (upper + 1));
+  }
+
+  addPokedex(pokeArr) {
+    for (const pokemon of pokeArr) {
+      this.pokedex[pokemon.data.id] = pokemon;
+    }
   }
 
   releaseItem() {
@@ -156,5 +184,5 @@ class VendingMachine {
     return changes;
   }
 }
-
-module.exports = VendingMachine;
+window.VendingMachine = VendingMachine;
+// module.exports = VendingMachine;

@@ -1,0 +1,29 @@
+#vending {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: space-between;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.packArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.packCommon {
+  background-color: blue;
+  width: 7em;
+  height: 13em;
+  margin: 0 20px;
+}
+
+.buyBtnCommon {
+  display: block;
+  text-align: center;
+  margin: 5px auto;
+  width: 5em;
+  height: 3em;
+}
