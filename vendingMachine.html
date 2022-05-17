@@ -9,35 +9,52 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Pokemon VendhingMachine</h1>
-    <div id="vending">
-      <div class="packArea">
-        <div id="pack1" class="packCommon"></div>
-        <button id="buyBtn1" class="buyBtnCommon"></button>
+    <div id="header">
+      <div id="damySpace">
+        <button id="buyBtn">Buy</button>
       </div>
-      <div class="packArea">
-        <div id="pack2" class="packCommon"></div>
-        <button id="buyBtn2" class="buyBtnCommon"></button>
-      </div>
-      <div class="packArea">
-        <div id="pack3" class="packCommon"></div>
-        <button id="buyBtn3" class="buyBtnCommon"></button>
-      </div>
-      <div class="packArea">
-        <div id="pack4" class="packCommon"></div>
-        <button id="buyBtn4" class="buyBtnCommon"></button>
-      </div>
-      <div class="packArea">
-        <div id="pack5" class="packCommon"></div>
-        <button id="buyBtn5" class="buyBtnCommon"></button>
-      </div>
-      <div class="packArea">
-        <div id="pack6" class="packCommon"></div>
-        <button id="buyBtn6" class="buyBtnCommon"></button>
+      <h1 id="title">Pokemon VendhingMachine</h1>
+      <div id="payBlock">
+        <form action="" method="get" name="payForm">
+          <label for="payArea"></label>
+          <input id="payArea" type="number" text="" name="pay" />
+          <input id="payBtn" type="button" value="Pay" />
+        </form>
+        <div id="balanceArea">
+          <div id="balanceText">Balance:</div>
+          <div id="balance">0</div>
+        </div>
       </div>
     </div>
+    <button id="pokedexBtn">pokedex</button>
+    <div id="vending">
+      <div class="packArea">
+        <img id="pack1" class="packCommon" src="./images/pack_ver1.png" />
+        <button id="buyBtn1" class="buyBtnCommon" value="260">¥260</button>
+      </div>
+      <div class="packArea">
+        <img id="pack2" class="packCommon" src="./images/pack_ver2.jpg" />
+        <button id="buyBtn2" class="buyBtnCommon" value="180">¥180</button>
+      </div>
+      <div class="packArea">
+        <img id="pack3" class="packCommon" src="./images/pack_ver3.jpeg" />
+        <button id="buyBtn3" class="buyBtnCommon" value="290">¥290</button>
+      </div>
+      <div class="packArea">
+        <img id="pack4" class="packCommon" src="./images/pack_ver4.jpg" />
+        <button id="buyBtn4" class="buyBtnCommon" value="310">¥310</button>
+      </div>
+      <div class="packArea">
+        <img id="pack5" class="packCommon" src="./images/pack_ver5.jpeg" />
+        <button id="buyBtn5" class="buyBtnCommon" value="170">¥170</button>
+      </div>
+      <div class="packArea">
+        <img id="pack6" class="packCommon" src="./images/pack_ver6.png" />
+        <button id="buyBtn6" class="buyBtnCommon" value="410">¥410</button>
+      </div>
+    </div>
+    <div id="container"></div>
 
-    <script src="./pokemons.js"></script>
     <script src="./pokemonager.js"></script>
     <script src="./VendingMachine.js"></script>
     <script src="./app.js"></script>

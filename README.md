@@ -1,6 +1,11 @@
 # pokemon-card-vending-machine
 
-⭐️ ポケモンカードの自販機を作ります
+⭐️ Pokemon Vending Machine⭐️
+
+● 選択要件
+・外部 API の使用
+・外部ライブラリの使用
+・レスポンシブ対応
 
 ● 機能
 ・お金を入れる
