@@ -1,31 +1,21 @@
-let vendingMachine = new VendingMachine();
-
+const vendingMachine = new VendingMachine();
 const vendingEl = document.getElementById("vending");
 const containerEl = document.getElementById("container");
-
-const btn1 = document.getElementById("buyBtn1");
-const btn2 = document.getElementById("buyBtn2");
-const btn3 = document.getElementById("buyBtn3");
-const btn4 = document.getElementById("buyBtn4");
-const btn5 = document.getElementById("buyBtn5");
-const btn6 = document.getElementById("buyBtn6");
-
-btn1.addEventListener("click", () => vendingMachine.getFivePack("a", btn1));
-btn2.addEventListener("click", () => vendingMachine.getFivePack("b", btn2));
-btn3.addEventListener("click", () => vendingMachine.getFivePack("c", btn3));
-btn4.addEventListener("click", () => vendingMachine.getFivePack("d", btn4));
-btn5.addEventListener("click", () => vendingMachine.getFivePack("e", btn5));
-btn6.addEventListener("click", () => vendingMachine.getFivePack("f", btn6));
-
 const pokedexBtnEl = document.getElementById("pokedexBtn");
-vendingMachine.containerEl = containerEl;
-// window.containerEl = containerEl;
-pokedexBtnEl.addEventListener("click", () =>
-  vendingMachine.createPokedex(1126)
-);
-
+const pokedexTitleEl = document.getElementById('pokedexTitle')
 const payBtnEl = document.getElementById("payBtn");
+const buyBtnEl = document.getElementById("buyBtn");
+const metEl = document.getElementById("numOfMet");
+
+vendingMachine.containerEl = containerEl;
 vendingMachine.balanceEl = document.getElementById("balance");
+vendingMachine.balanceEl.innerText = vendingMachine.balance;
+
+buyBtnEl.addEventListener("click", () => elemReset());
+pokedexBtnEl.addEventListener("click", () => {
+  vendingMachine.createPokedex(1126);
+  pokedexTitleEl.innerText = 'Your Pokédex';
+});
 payBtnEl.addEventListener("click", () => {
   vendingMachine.insertCoin(payForm.pay.value);
   let balanceInt = Number(vendingMachine.balanceEl.innerText);
@@ -70,41 +60,38 @@ const createPackElem = () => {
 
 const createCardElem = (pokemonsObj) => {
   let imgEl, idEl, nameEl, typeEl;
-  pokemonsObj.forEach((pokemonObj, index) => {
+  pokemonsObj.forEach((pokemonObj) => {
     let backImgEl = document.createElement("img");
     backImgEl.src = "./images/poke_ura_new.jpeg";
     backImgEl.className = "backImg";
     backImgEl.id = `${pokemonObj.data.id}_backImg`;
-    console.log(backImgEl.id);
 
     let cardEl = document.createElement("a");
-    cardEl.className = "card";
-
-    idEl = document.createElement("div");
-    idEl.className = "pokemonId";
-    idEl.innerText = "#" + pokemonObj.data.id;
-    console.log(vendingMachine.typeArray);
-
+    cardEl.className = "winningCard";
     cardEl.style.backgroundColor =
       vendingMachine.typeArray[pokemonObj.data.types[0].type.name];
 
+    idEl = document.createElement("div");
+    idEl.className = "winningPokemonId";
+    idEl.innerText = "#" + pokemonObj.data.id;
+
     imgEl = document.createElement("img");
-    imgEl.className = "pokemonImg";
+    imgEl.className = "winningPokemonImg";
     imgEl.src = pokemonObj.data.sprites.front_default;
 
     nameEl = document.createElement("div");
-    nameEl.className = "pokemonName";
+    nameEl.className = "winningPokemonName";
     nameEl.innerText = pokemonObj.data.name;
 
     typeEl = document.createElement("div");
-    typeEl.className = "pokemonType";
+    typeEl.className = "winningPokemonType";
     typeEl.innerText = pokemonObj.data.types[0].type.name;
-    cardEl.append(idEl, imgEl, nameEl, typeEl);
 
+    cardEl.append(idEl, imgEl, nameEl, typeEl);
     buyCardsEl = document.createElement("div");
     buyCardsEl.id = `${pokemonObj.data.id}_buyCard`;
-    buyCardsEl.className = "GotCardParent";
-    console.log("backImgEl: ", backImgEl);
+    buyCardsEl.className = "winningCardParent";
+
     backImgEl.addEventListener("click", () =>
       operateStyle(cardEl, pokemonObj.data.id)
     );
@@ -120,16 +107,17 @@ const deleteElem = (id) => {
 };
 
 const operateStyle = (cardEl, id) => {
-  console.log("id: ", id);
-  let buyCardsEl = document.getElementById(`${id}_buyCard`);
-  console.log("buyCardsEl: ", buyCardsEl);
+  const buyCardsEl = document.getElementById(`${id}_buyCard`);
   buyCardsEl.innerHTML = "";
   buyCardsEl.append(cardEl);
 };
 
-const buyBtnEl = document.getElementById("buyBtn");
-buyBtnEl.addEventListener("click", () => {
+const elemReset = () => {
+  pokedexTitleEl.innerText = '';
+  deleteElem("vending");
   deleteElem("vending");
   deleteElem("container");
   createPackElem();
-});
+}
+
+elemReset();

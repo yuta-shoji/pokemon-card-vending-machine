@@ -5,16 +5,7 @@ let pokemonager = new Pokemonager();
 
 class VendingMachine {
   constructor() {
-    this.balance = 0;
-    this.packs = {
-      a: [1, 151],
-      b: [152, 251],
-      c: [252, 386],
-      d: [387, 493],
-      e: [494, 721],
-      f: [722, 1126],
-    };
-    this.selectStatus = "";
+    this.balance = 1000;
 
     this.inventory = {
       a: [],
@@ -47,22 +38,20 @@ class VendingMachine {
     };
 
     this.pokedex = {};
-    // this.allPokemon();
-    this.fiveElem = [];
+    this.firstFlg = false;
+    this.met = 5;
   }
 
   async allPokemon() {
     console.log("allPokemon!!!!!!!");
     let all = await pokemonager.getPokemons(1126);
-    let jsonData = [];
-    let x;
+    let jsonDataArray = [];
+    let jsonData;
     for (const data of all.data.results) {
-      // console.log("data: ", data);
-      x = await axios.get(data.url);
-      jsonData.push(x);
+      jsonData = await axios.get(data.url);
+      jsonDataArray.push(jsonData);
     }
-    // console.log("jsonData: ", jsonData);
-    for (const pokemon of jsonData) {
+    for (const pokemon of jsonDataArray) {
       if (pokemon.data.id <= 151) {
         this.inventory.a.push(pokemon);
       } else if (pokemon.data.id <= 251) {
@@ -78,51 +67,28 @@ class VendingMachine {
       }
       if (this.pokedex[pokemon.data.id] === undefined) {
         this.pokedex[pokemon.data.id] = "";
+        this.firstFlg ? this.met++ : '';
       }
     }
+    console.log('this.firstFlg: ', this.firstFlg);
+    this.firstFlg = true;
+    metEl.innerText = this.met;
+    console.log('this.met: ', this.met);
   }
-
-  // pokemonager.getAllPokemon().then((res) => {
-  //   this.inventory = {
-  //     a: res.filter(pokemon => pokemon.id <= 200),
-  //     b: res.filter(pokemon => pokemon.id >= 201 && pokemon.id <= 400),
-  //     c: res.filter((pokemon => pokemon.id >= 401 && pokemon.id <= 600)),
-  //     d: res.filter((pokemon => pokemon.id >= 601 && pokemon.id <= 80)),
-  //     e: res.filter((pokemon => pokemon.id >= 801 && pokemon.id <= 1000)),
-  //     f: res.filter((pokemon => pokemon.id >= 1001 && pokemon.id <= 1126))
-  //   };
-  //   return this.inventory
-  // });
 
   throwError(flag) {
     if (!flag) {
       throw new Error();
     }
   }
+
   insertCoin(amount) {
-    // this.throwError(Object.keys(this.till).includes(amount.toString()));
-    // this.till[amount]++;
     this.balance += Number(amount);
   }
-  // selectRow(row) {
-  //   this.rowBtn = "ABCD";
-  //   this.throwError(this.rowBtn.indexOf(row) !== -1);
-  //   this.selectedRow = this.rowBtn.indexOf(row);
-  //   console.log("selected row    : ", this.rowBtn[this.selectedRow]);
-  //   return this.selectedRow;
-  // }
-
-  // selectColumn(column) {
-  //   this.throwError(column > 0 && column <= 4);
-  //   this.selectedColumn = column - 1;
-  //   console.log("selected column : ", this.selectedColumn);
-  //   return this.selectedColumn;
-  // }
 
   async selectPack(pack) {
     await vendingMachine.allPokemon();
     this.selectStatus = pack;
-    // const packs = await this.generateInventory();
     return this.inventory[pack];
   }
 
@@ -132,7 +98,6 @@ class VendingMachine {
       return;
     }
 
-    console.log(this.balance);
     this.balance -= Number(elem.value);
     this.balanceEl.innerText = this.balance;
 
@@ -145,7 +110,6 @@ class VendingMachine {
       packResult.push(packs[num]);
     }
     this.addPokedex(packResult);
-    console.log("packResult: ", packResult);
     createCardElem(packResult);
     return packResult;
   }
@@ -160,108 +124,45 @@ class VendingMachine {
     }
   }
 
-  releaseItem() {
-    this.selectedItem = this.inventory[this.selectedRow][this.selectedColumn];
-    this.throwError(this.selectedItem.count !== 0);
-    this.throwError(this.selectedItem.price <= this.balance);
-    this.selectedItem.count--;
-
-    console.log(
-      `selectedRow : ${this.rowBtn[this.selectedRow]}`,
-      `selectedColumn : ${this.selectedColumn}`
-    );
-    console.log(`Here is your [${this.selectedItem.name}]`);
-
-    return this.selectedItem;
-  }
-
-  changeReturn() {
-    if (this.selectedItem === undefined) {
-      console.log("change          :", this.balance);
-      let beforeBalance = this.balance;
-      this.balance = 0;
-      return beforeBalance;
-    }
-    const changes = {
-      1: 0,
-      5: 0,
-      10: 0,
-      50: 0,
-      100: 0,
-      500: 0,
-    };
-    this.change = this.balance - this.selectedItem.price;
-    console.log("change          :", this.change);
-
-    const reversedArray = Object.keys(changes)
-      .map((key) => Number(key))
-      .sort((a, b) => b - a);
-
-    for (const coin of reversedArray) {
-      while (this.change > 0) {
-        if (this.change >= coin) {
-          this.change -= coin;
-          changes[coin]++;
-        } else {
-          break;
-        }
-      }
-    }
-    this.balance = 0;
-    console.group("💰Details of change");
-    for (const key in changes) {
-      console.log(`${key} yen : ${changes[key]} coins`);
-    }
-    console.groupEnd();
-    return changes;
-  }
-
   async createPokedex(n) {
     try {
       this.containerEl.innerHTML = "";
       const pokemonsObj = await pokemonager.getPokemons(n);
-      let pokeData, cardEl, imgEl, idEl, nameEl, typeEl, allType;
+      let pokeData, cardEl, imgEl, idEl, nameEl, typeEl;
       let flg = false;
 
       for (const pokeObj of pokemonsObj.data.results) {
         pokeData = await axios.get(pokeObj.url);
-        !flg ? ((flg = true), console.log(pokeData.data)) : "";
+        !flg ? flg = true : "";
 
         cardEl = document.createElement("a");
-        cardEl.className = "card";
+        cardEl.className = "pokedexCard";
 
         idEl = document.createElement("div");
-        idEl.className = "pokemonId";
+        idEl.className = "pokedexId";
         idEl.innerText = "#" + pokeData.data.id;
 
         if (this.pokedex[pokeData.data.id] !== "") {
           cardEl.style.backgroundColor =
             this.typeArray[pokeData.data.types[0].type.name];
-          // cardEl.href = './pokemon.html';
-          // cardEl.addEventListener("click", {
-          //   pokemon: pokeData.data,
-          //   element: this.containerEl,
-          //   handleEvent: this.pokemonSingle.single,
-          // });
 
           imgEl = document.createElement("img");
-          imgEl.className = "pokemonImg";
+          imgEl.className = "pokedexImg";
           imgEl.src = pokeData.data.sprites.front_default;
 
           nameEl = document.createElement("div");
-          nameEl.className = "pokemonName";
+          nameEl.className = "pokedexName";
           nameEl.innerText = pokeData.data.name;
 
           typeEl = document.createElement("div");
-          typeEl.className = "pokemonType";
+          typeEl.className = "pokedexType";
           typeEl.innerText = pokeData.data.types[0].type.name;
           cardEl.append(idEl, imgEl, nameEl, typeEl);
-          this.fiveElem.push(cardEl);
         } else {
           cardEl.style.backgroundColor = "white";
 
           nameEl = document.createElement("div");
-          nameEl.className = "pokemonName hatena";
+          nameEl.className = "pokemonName question";
           nameEl.innerText = "???";
 
           cardEl.append(idEl, nameEl);

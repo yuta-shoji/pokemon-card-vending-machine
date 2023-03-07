@@ -4,16 +4,24 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pokédex</title>
+    <title>Pokémon Vending Machine</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div id="header">
-      <div id="damySpace">
-        <button id="buyBtn">Buy</button>
+      <div id="dummySpace">
+        <div id="openPokedex">
+          <button id="pokedexBtn">Open Pokedex</button>
+          <div id="met">Met :　</div>
+          <div id="numOfMet"></div>
+          <div id="maxOfMet">　　/ 1126</div>
+        </div>
+        <div id="buyANewPack">
+          <button id="buyBtn">Buy a new Pack</button>
+        </div>
       </div>
-      <h1 id="title">Pokemon VendhingMachine</h1>
+      <h1 id="title">Pokemon Vending Machine</h1>
       <div id="payBlock">
         <form action="" method="get" name="payForm">
           <label for="payArea"></label>
@@ -22,37 +30,12 @@
         </form>
         <div id="balanceArea">
           <div id="balanceText">Balance:</div>
-          <div id="balance">0</div>
+          <div id="balance"></div>
         </div>
       </div>
     </div>
-    <button id="pokedexBtn">pokedex</button>
-    <div id="vending">
-      <div class="packArea">
-        <img id="pack1" class="packCommon" src="./images/pack_ver1.png" />
-        <button id="buyBtn1" class="buyBtnCommon" value="260">¥260</button>
-      </div>
-      <div class="packArea">
-        <img id="pack2" class="packCommon" src="./images/pack_ver2.jpg" />
-        <button id="buyBtn2" class="buyBtnCommon" value="180">¥180</button>
-      </div>
-      <div class="packArea">
-        <img id="pack3" class="packCommon" src="./images/pack_ver3.jpeg" />
-        <button id="buyBtn3" class="buyBtnCommon" value="290">¥290</button>
-      </div>
-      <div class="packArea">
-        <img id="pack4" class="packCommon" src="./images/pack_ver4.jpg" />
-        <button id="buyBtn4" class="buyBtnCommon" value="310">¥310</button>
-      </div>
-      <div class="packArea">
-        <img id="pack5" class="packCommon" src="./images/pack_ver5.jpeg" />
-        <button id="buyBtn5" class="buyBtnCommon" value="170">¥170</button>
-      </div>
-      <div class="packArea">
-        <img id="pack6" class="packCommon" src="./images/pack_ver6.png" />
-        <button id="buyBtn6" class="buyBtnCommon" value="410">¥410</button>
-      </div>
-    </div>
+    <div id="vending"></div>
+    <div id="pokedexTitle"></div>
     <div id="container"></div>
 
     <script src="./pokemonager.js"></script>
